@@ -24,9 +24,9 @@
                         <tr>
                             <th>No</th>
                             <th>Gambar</th>
-                            <th>Kategori</th>
-                            <th>Tanggal</th>
-                            <th>Aksi</th>
+                            <th class="py-3 border-0">Kategori</th>
+                            <th class="py-3 border-0">Slide?</th>
+                            <th class="px-4 py-3 border-0 text-end">Aksi</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -36,13 +36,19 @@
                                 <td>
                                     @php
                                         // Quick fallback check for dummy seeded images vs uploaded ones
-                                        $imgPath = Str::contains($gallery->image, 'galeri') ? asset('images/'.$gallery->image) : asset('storage/galleries/'.$gallery->image);
+                                        $imgPath = Str::contains($gallery->image, 'galeri') ? asset('images/'.$gallery->image) : asset('storage/'.$gallery->image);
                                     @endphp
                                     <img src="{{ $imgPath }}" alt="Gallery img" height="60" class="rounded">
                                 </td>
-                                <td><span class="badge bg-secondary">{{ $gallery->category }}</span></td>
-                                <td>{{ $gallery->created_at->format('d M Y') }}</td>
-                                <td>
+                                <td class="py-3 border-0">{{ $gallery->category }}</td>
+                                <td class="py-3 border-0">
+                                    @if($gallery->is_carousel)
+                                        <span class="badge bg-success">Slide</span>
+                                    @else
+                                        <span class="badge bg-light text-dark">Grid</span>
+                                    @endif
+                                </td>
+                                <td class="px-4 py-3 border-0 text-end">
                                     <a href="{{ route('admin.galleries.edit', $gallery->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
                                     <form action="{{ route('admin.galleries.destroy', $gallery->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus gambar ini?')">
                                         @csrf

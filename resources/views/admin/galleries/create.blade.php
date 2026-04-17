@@ -33,6 +33,13 @@
                         </div>
 
                         <div class="mb-3">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="is_carousel" name="is_carousel" value="1" {{ old('is_carousel', $gallery->is_carousel ?? 0) ? 'checked' : '' }}>
+                                <label class="form-check-label fw-bold" for="is_carousel">Tampilkan di Foto Slide (Carousel)</label>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
                             <label class="form-label">File Gambar</label>
                             <input type="file" name="image" class="form-control" accept="image/*" {{ isset($gallery) ? '' : 'required' }}>
                             @if(isset($gallery) && $gallery->image)

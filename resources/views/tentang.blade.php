@@ -152,21 +152,28 @@
 <section class="section">
     <div class="container">
         <div class="grid-2">
-            <div>
-                <h2 class="section-title">TASTY FOOD</h2>
-                <p class="text-body fw-bold text-dark mb-4">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare, augue eu rutrum commodo, dui diam convallis arcu, eget consectetur ex sem eget lacus. Nullam vitae dignissim neque, vel luctus ex. Fusce sit amet viverra ante.
-                </p>
-                <p class="text-body text-muted">
-                    Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare, augue eu rutrum commodo, dui diam convallis arcu, eget consectetur ex sem eget lacus. Nullam vitae dignissim neque, vel luctus ex. Fusce sit amet viverra ante.
-                </p>
+            <div class="position-relative">
+                @if(Auth::check() && Auth::user()->role === 'admin')
+                    <a href="{{ route('admin.company_profile.edit') }}" class="btn btn-sm btn-warning mb-3 shadow-sm rounded-pill px-3">
+                        <i class="bi bi-pencil-square pe-1"></i> Edit Profil
+                    </a>
+                @endif
+                <h2 class="section-title text-uppercase">{{ $companyProfile->title ?? 'TASTY FOOD' }}</h2>
+                <div class="pe-lg-4">
+                    <p class="text-body fw-bold text-dark mb-4">
+                        {{ $companyProfile->desc_bold ?? 'Lorem ipsum...' }}
+                    </p>
+                    <p class="text-body text-muted">
+                        {{ $companyProfile->desc_muted ?? 'Lorem ipsum...' }}
+                    </p>
+                </div>
             </div>
             <div class="img-grid">
                 <div class="img-card shadow-sm" style="box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                    <img src="{{ asset('images/monika-grabkowska-P1aohbiT-EY-unsplash.jpg') }}" alt="Foto Makanan">
+                    <img src="{{ str_contains($companyProfile->image1 ?? '', 'images/') ? asset($companyProfile->image1) : asset('storage/' . ($companyProfile->image1 ?? '')) }}" alt="Foto Makanan">
                 </div>
                 <div class="img-card shadow-sm" style="box-shadow: 0 10px 25px rgba(0,0,0,0.1);">
-                    <img src="{{ asset('images/sebastian-coman-photography-eBmyH7oO5wY-unsplash.jpg') }}" alt="Foto Chef">
+                    <img src="{{ str_contains($companyProfile->image2 ?? '', 'images/') ? asset($companyProfile->image2) : asset('storage/' . ($companyProfile->image2 ?? '')) }}" alt="Foto Chef">
                 </div>
             </div>
         </div>
@@ -204,6 +211,37 @@
                 <img src="{{ asset('images/eiliv-aceron-ZuIDLSz3XLg-unsplash.jpg') }}" alt="Misi Kami">
             </div>
 
+            @foreach($aboutContents as $content)
+                <div class="vm-card {{ $loop->iteration % 2 == 0 ? 'reverse' : '' }}">
+                    @php
+                        $aboutImg = str_contains($content->image ?? '', '/') ? asset('storage/' . $content->image) : asset('storage/about/' . $content->image);
+                    @endphp
+                    @if($loop->iteration % 2 != 0)
+                        <img src="{{ $aboutImg }}" alt="{{ $content->title }}">
+                    @endif
+                    <div>
+                        <h3>{{ $content->title }}</h3>
+                        <p class="text-body">
+                            {{ $content->description }}
+                        </p>
+                    </div>
+                    @if($loop->iteration % 2 == 0)
+                        <img src="{{ $aboutImg }}" alt="{{ $content->title }}">
+                    @endif
+                </div>
+            @endforeach
+            @auth
+                @if(Auth::user()->role === 'admin')
+                    <div class="text-center mt-5">
+                        <a href="{{ route('admin.about.create') }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3 me-2">
+                            <i class="bi bi-plus-circle pe-1"></i> Tambah About
+                        </a>
+                        <a href="{{ route('admin.about.index') }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3">
+                            <i class="bi bi-pencil-square pe-1"></i> Kelola About
+                        </a>
+                    </div>
+                @endif
+            @endauth
         </div>
     </div>
 </section>

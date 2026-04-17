@@ -8,48 +8,64 @@
 </div>
 
 <div class="container my-5">
+    @auth
+        @if(Auth::user()->role === 'admin')
+            <div class="mb-4">
+                <a href="{{ route('admin.galleries.create', ['is_carousel' => 1]) }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3 me-2">
+                    <i class="bi bi-plus-circle pe-1"></i> Tambah Foto Slide
+                </a>
+                <a href="{{ route('admin.galleries.index') }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3">
+                    <i class="bi bi-pencil-square pe-1"></i> Kelola Foto Slide
+                </a>
+            </div>
+        @endif
+    @endauth
+
     <div id="galleryCarousel" class="carousel slide mb-5" data-bs-ride="carousel">
         <div class="carousel-inner rounded-4 shadow">
-            <div class="carousel-item active">
-                <img src="{{ asset('images/michele-blackwell-rAyCBQTH7ws-unsplash.jpg') }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Salmon Dish">
-            </div>
-            <div class="carousel-item">
-                <img src="{{ asset('images/monika-grabkowska-P1aohbiT-EY-unsplash.jpg') }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Salad Dish">
-            </div>
+            @forelse($carouselImages as $index => $item)
+                <div class="carousel-item {{ $index === 0 ? 'active' : '' }}">
+                    @php
+                        $galBase = str_contains($item->image, 'galeri') ? asset('images/' . $item->image) : (str_contains($item->image, '/') ? asset('storage/' . $item->image) : asset('storage/galleries/' . $item->image));
+                    @endphp
+                    <img src="{{ $galBase }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Gallery Slide">
+                </div>
+            @empty
+                <div class="carousel-item active">
+                    <img src="{{ asset('images/michele-blackwell-rAyCBQTH7ws-unsplash.jpg') }}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="Default Slide">
+                </div>
+            @endforelse
         </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-control="prev">
+        <button class="carousel-control-prev" type="button" data-bs-target="#galleryCarousel" data-bs-slide="prev">
             <span class="carousel-control-prev-icon bg-dark rounded-circle p-3"></span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-control="next">
+        <button class="carousel-control-next" type="button" data-bs-target="#galleryCarousel" data-bs-slide="next">
             <span class="carousel-control-next-icon bg-dark rounded-circle p-3"></span>
         </button>
     </div>
 
     <div class="row g-3">
-        @php 
-            $galleryImages = [
-                'images/anh-nguyen-kcA-c3f_3FE-unsplash.jpg',
-                'images/anna-pelzer-IGfIGP5ONV0-unsplash.jpg',
-                'images/brooke-lark-nBtmglfY0HU-unsplash.jpg',
-                'images/brooke-lark-oaz0raysASk-unsplash.jpg',
-                'images/ella-olsson-mmnKI8kMxpc-unsplash.jpg',
-                'images/fathul-abrar-T-qI_MI2EMA-unsplash.jpg',
-                'images/jimmy-dean-Jvw3pxgeiZw-unsplash.jpg',
-                'images/jonathan-borba-Gkc_xM3VY34-unsplash.jpg',
-                'images/luisa-brimble-HvXEbkcXjSk-unsplash.jpg',
-                'images/mariana-medvedeva-iNwCO9ycBlc-unsplash.jpg',
-                'images/michele-blackwell-rAyCBQTH7ws-unsplash.jpg',
-                'images/monika-grabkowska-P1aohbiT-EY-unsplash.jpg',
-            ];
-        @endphp
-        @foreach($galleryImages as $img)
+        @foreach($galleries as $item)
         <div class="col-6 col-md-3">
             <div class="ratio ratio-1x1 overflow-hidden rounded-4 shadow-sm gallery-hover">
-                <img src="{{ asset($img) }}" class="img-fluid object-fit-cover w-100 h-100" alt="Gallery">
+                @php
+                    $galGrid = str_contains($item->image, 'galeri') ? asset('images/' . $item->image) : (str_contains($item->image, '/') ? asset('storage/' . $item->image) : asset('storage/galleries/' . $item->image));
+                @endphp
+                <img src="{{ $galGrid }}" class="img-fluid object-fit-cover w-100 h-100" alt="Gallery Image">
             </div>
         </div>
         @endforeach
     </div>
+
+    @auth
+        @if(Auth::user()->role === 'admin')
+            <div class="text-center mt-5">
+                <a href="{{ route('admin.galleries.create') }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3">
+                    <i class="bi bi-plus-circle pe-1"></i> Tambah Foto Galeri
+                </a>
+            </div>
+        @endif
+    @endauth
 </div>
 
 <style>

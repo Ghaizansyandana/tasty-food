@@ -36,7 +36,7 @@
                                 <td>
                                     @php
                                         // Quick fallback check for dummy seeded images vs uploaded ones
-                                        $imgPath = Str::contains($news->image, 'berita') ? asset('images/'.$news->image) : asset('storage/news/'.$news->image);
+                                        $imgPath = Str::contains($news->image, 'berita') ? asset('images/'.$news->image) : asset('storage/'.$news->image);
                                     @endphp
                                     <img src="{{ $imgPath }}" alt="News img" width="60" class="rounded">
                                 </td>

@@ -4,13 +4,17 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PageController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\Admin\AboutController;
+use App\Http\Controllers\Admin\CompanyProfileController;
+use App\Http\Controllers\Admin\HomeCardController;
+use App\Http\Controllers\Admin\WebsiteSettingController;
 
 // Public routes
 Route::get('/', [PageController::class, 'home'])->name('home');
-Route::view('/tentang', 'tentang')->name('tentang');
-Route::view('/berita', 'berita')->name('berita.index');
-Route::view('/galeri', 'galeri')->name('galeri');
-Route::view('/kontak', 'kontak')->name('kontak');
+Route::get('/tentang', [PageController::class, 'tentang'])->name('tentang');
+Route::get('/berita', [PageController::class, 'berita'])->name('berita.index');
+Route::get('/galeri', [PageController::class, 'galeri'])->name('galeri');
+Route::get('/kontak', [PageController::class, 'kontak'])->name('kontak');
 Route::get('/berita/{slug}', [NewsController::class, 'show'])->name('berita.show');
 
 // Authentication routes
@@ -35,6 +39,12 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('users', \App\Http\Controllers\Admin\UserController::class);
         Route::resource('news', \App\Http\Controllers\Admin\NewsController::class);
         Route::resource('galleries', \App\Http\Controllers\Admin\GalleryController::class);
+        Route::resource('about', AboutController::class);
+        Route::get('company-profile', [CompanyProfileController::class, 'edit'])->name('company_profile.edit');
+        Route::put('company-profile', [CompanyProfileController::class, 'update'])->name('company_profile.update');
+        Route::resource('home_cards', HomeCardController::class);
+        Route::get('website-settings', [WebsiteSettingController::class, 'index'])->name('website_settings.index');
+        Route::put('website-settings', [WebsiteSettingController::class, 'update'])->name('website_settings.update');
     });
     
     // User routes

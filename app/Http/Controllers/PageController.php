@@ -4,31 +4,44 @@ namespace App\Http\Controllers;
 
 use App\Models\Gallery;
 use App\Models\News;
+use App\Models\AboutContent;
+use App\Models\CompanyProfile;
+use App\Models\HomeCard;
+use App\Models\WebsiteSetting;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
     public function home() {
-        $news = News::latest()->take(4)->get(); // Ambil 4 berita terbaru
+        $news = News::latest()->take(4)->get();
         $galleries = Gallery::latest()->take(6)->get();
-        return view('home', compact('news', 'galleries'));
+        $cards = HomeCard::all();
+        $settings = WebsiteSetting::all()->pluck('value', 'key');
+        return view('home', compact('news', 'galleries', 'cards', 'settings'));
     }
 
     public function berita() {
-        $allNews = News::all();
-        return view('berita', ['news' => $allNews]);
+        $news = News::latest()->paginate(9);
+        $settings = WebsiteSetting::all()->pluck('value', 'key');
+        return view('berita', compact('news', 'settings'));
     }
 
     public function galeri() {
         $galleries = Gallery::latest()->get();
-        return view('galeri', compact('galleries'));
+        $carouselImages = Gallery::where('is_carousel', true)->latest()->get();
+        $settings = WebsiteSetting::all()->pluck('value', 'key');
+        return view('galeri', compact('galleries', 'carouselImages', 'settings'));
     }
 
     public function tentang() {
-        return view('tentang');
+        $aboutContents = AboutContent::all();
+        $companyProfile = CompanyProfile::first();
+        $settings = WebsiteSetting::all()->pluck('value', 'key');
+        return view('tentang', compact('aboutContents', 'companyProfile', 'settings'));
     }
 
     public function kontak() {
-        return view('kontak');
+        $settings = WebsiteSetting::all()->pluck('value', 'key');
+        return view('kontak', compact('settings'));
     }
 }

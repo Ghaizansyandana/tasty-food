@@ -220,15 +220,15 @@
                     <ul class="footer-contact">
                         <li>
                             <i class="fas fa-envelope"></i>
-                            <span>tastyfood@gmail.com</span>
+                            <span>{{ $settings['contact_email'] ?? 'tastyfood@gmail.com' }}</span>
                         </li>
                         <li>
                             <i class="fas fa-phone"></i>
-                            <span>+62 812 3456 7890</span>
+                            <span>{{ $settings['contact_phone'] ?? '+62 812 3456 7890' }}</span>
                         </li>
                         <li>
                             <i class="fas fa-map-marker-alt"></i>
-                            <span>Kota Bandung, Jawa Barat</span>
+                            <span>{{ $settings['contact_location'] ?? 'Kota Bandung, Jawa Barat' }}</span>
                         </li>
                     </ul>
                 </div>

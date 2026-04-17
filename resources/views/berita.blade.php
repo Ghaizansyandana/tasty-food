@@ -30,30 +30,33 @@
 
     <h4 class="mb-4">BERITA LAINNYA</h4>
     <div class="row g-4">
-        @php
-            $newsImages = [
-                'images/sanket-shah-SVA7TyHxojY-unsplash.jpg',
-                'images/sebastian-coman-photography-eBmyH7oO5wY-unsplash.jpg',
-                'images/jimmy-dean-Jvw3pxgeiZw-unsplash.jpg',
-                'images/luisa-brimble-HvXEbkcXjSk-unsplash.jpg',
-                'images/ella-olsson-mmnKI8kMxpc-unsplash.jpg',
-                'images/fathul-abrar-T-qI_MI2EMA-unsplash.jpg',
-                'images/jonathan-borba-Gkc_xM3VY34-unsplash.jpg',
-                'images/mariana-medvedeva-iNwCO9ycBlc-unsplash.jpg',
-            ];
-        @endphp
-        @foreach ($newsImages as $img)
+        @forelse ($news as $item)
         <div class="col-md-3">
             <div class="card border-0 shadow-sm rounded-4 h-100">
-                <img src="{{ asset($img) }}" class="card-img-top rounded-top-4" style="height: 200px; object-fit: cover;" alt="Berita">
+                @if($item->image)
+                    @php
+                        $itemImg = str_contains($item->image, 'berita') ? asset('images/' . $item->image) : (str_contains($item->image, '/') ? asset('storage/' . $item->image) : asset('storage/news/' . $item->image));
+                    @endphp
+                    <img src="{{ $itemImg }}" class="card-img-top rounded-top-4" style="height: 200px; object-fit: cover;" alt="{{ $item->title }}">
+                @else
+                    <img src="{{ asset('images/no-image.jpg') }}" class="card-img-top rounded-top-4" style="height: 200px; object-fit: cover;" alt="No Image">
+                @endif
                 <div class="card-body">
-                    <h6 class="fw-bold">LOREM IPSUM</h6>
-                    <p class="small text-muted">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-                    <a href="#" class="text-warning text-decoration-none small">Baca selengkapnya</a>
+                    <h6 class="fw-bold text-uppercase">{{ $item->title }}</h6>
+                    <p class="small text-muted">{{ Str::limit($item->excerpt, 80) }}</p>
+                    <a href="{{ route('berita.show', $item->slug) }}" class="text-warning text-decoration-none small">Baca selengkapnya</a>
                 </div>
             </div>
         </div>
-        @endforeach
+        @empty
+        <div class="col-12 text-center py-5">
+            <p class="text-muted">Belum ada berita terbaru.</p>
+        </div>
+        @endforelse
+    </div>
+    
+    <div class="mt-5 d-flex justify-content-center">
+        {{ $news->links() }}
     </div>
 </div>
 @endsection

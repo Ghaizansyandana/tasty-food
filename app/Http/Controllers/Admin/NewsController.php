@@ -23,11 +23,12 @@ class NewsController extends Controller
 
     public function store(Request $request)
     {
+
         $request->validate([
             'title' => 'required|string|max:255',
             'excerpt' => 'required|string',
             'body' => 'required|string',
-            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'required|image|mimes:jpeg,png,jpg,webp|max:10240',
         ]);
 
         $imagePath = $request->file('image')->store('news', 'public');
@@ -37,7 +38,7 @@ class NewsController extends Controller
             'slug' => Str::slug($request->title) . '-' . uniqid(),
             'excerpt' => $request->excerpt,
             'body' => $request->body,
-            'image' => basename($imagePath),
+            'image' => $imagePath,
         ]);
 
         return redirect()->route('admin.news.index')->with('success', 'Berita berhasil ditambahkan.');
@@ -54,22 +55,21 @@ class NewsController extends Controller
             'title' => 'required|string|max:255',
             'excerpt' => 'required|string',
             'body' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:10240',
         ]);
 
         $data = [
             'title' => $request->title,
-            'slug' => Str::slug($request->title) . '-' . uniqid(),
             'excerpt' => $request->excerpt,
             'body' => $request->body,
         ];
 
         if ($request->hasFile('image')) {
-            if ($news->image && Storage::disk('public')->exists('news/' . $news->image)) {
-                Storage::disk('public')->delete('news/' . $news->image);
+            if ($news->image && Storage::disk('public')->exists($news->image)) {
+                Storage::disk('public')->delete($news->image);
             }
             $imagePath = $request->file('image')->store('news', 'public');
-            $data['image'] = basename($imagePath);
+            $data['image'] = $imagePath;
         }
 
         $news->update($data);
@@ -79,8 +79,8 @@ class NewsController extends Controller
 
     public function destroy(News $news)
     {
-        if ($news->image && Storage::disk('public')->exists('news/' . $news->image)) {
-            Storage::disk('public')->delete('news/' . $news->image);
+        if ($news->image && Storage::disk('public')->exists($news->image)) {
+            Storage::disk('public')->delete($news->image);
         }
         $news->delete();
         return redirect()->route('admin.news.index')->with('success', 'Berita berhasil dihapus.');

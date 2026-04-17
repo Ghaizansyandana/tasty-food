@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class Gallery extends Model
 {
-    protected $fillable = ['image', 'category'];
+    protected $fillable = ['image', 'category', 'is_carousel'];
 }

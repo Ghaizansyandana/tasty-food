@@ -50,20 +50,26 @@
         <div class="row">
             <div class="col-md-4">
                 <div class="dashboard-card text-center">
-                    <div class="stats-number">0</div>
+                    <div class="stats-number">{{ $userCount }}</div>
                     <p class="text-muted mb-0">Total Users</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="dashboard-card text-center">
-                    <div class="stats-number">0</div>
+                    <div class="stats-number">{{ $newsCount }}</div>
                     <p class="text-muted mb-0">Total Berita</p>
                 </div>
             </div>
             <div class="col-md-4">
                 <div class="dashboard-card text-center">
-                    <div class="stats-number">0</div>
+                    <div class="stats-number">{{ $galleryCount }}</div>
                     <p class="text-muted mb-0">Total Galeri</p>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="dashboard-card text-center">
+                    <div class="stats-number">{{ $galleryCount }}</div>
+                    <p class="text-muted mb-0">Total Kontak</p>
                 </div>
             </div>
         </div>
@@ -81,6 +87,21 @@
                     <a href="{{ route('admin.galleries.index') }}" class="btn btn-dark w-100 py-3">Kelola Galeri</a>
                 </div>
                 <div class="col-md-6 mb-3">
+                    <a href="{{ route('admin.about.index') }}" class="btn btn-dark w-100 py-3">Kelola Tentang</a>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <a href="{{ route('admin.company_profile.edit') }}" class="btn btn-dark w-100 py-3">Kelola Profil</a>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <a href="{{ route('admin.website_settings.index') }}" class="btn btn-dark w-100 py-3">Kelola Landing Page</a>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <a href="{{ route('admin.home_cards.index') }}" class="btn btn-dark w-100 py-3">Kelola Landing Cards</a>
+                </div>
+                <div class="col-md-6 mb-3">
+                      <a href="{{ route('admin.galleries.index') }}" class="btn btn-dark w-100 py-3">Kelola Kontak</a>
+                </div>
+                <div class="col-md-12 mb-3">
                     <a href="{{ route('home') }}" class="btn btn-outline-dark w-100 py-3">Lihat Website</a>
                 </div>
             </div>

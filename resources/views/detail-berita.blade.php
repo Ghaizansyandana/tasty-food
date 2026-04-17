@@ -29,13 +29,18 @@
 
         <article class="card">
             @php
-                $imgRel = 'images/' . ($detail->image ?? '');
-                $imgAbs = public_path($imgRel);
+                if (empty($detail->image)) {
+                    $imgUrl = asset('images/no-image.jpg');
+                } elseif (str_contains($detail->image, 'berita')) {
+                    $imgUrl = asset('images/' . $detail->image);
+                } elseif (str_contains($detail->image, '/')) {
+                    $imgUrl = asset('storage/' . $detail->image);
+                } else {
+                    $imgUrl = asset('storage/news/' . $detail->image);
+                }
             @endphp
             <div class="media">
-                @if(!empty($detail->image) && file_exists($imgAbs))
-                    <img src="{{ asset($imgRel) }}" alt="{{ $detail->title }}">
-                @endif
+                <img src="{{ $imgUrl }}" alt="{{ $detail->title }}">
             </div>
             <div class="content">
                 <h1>{{ $detail->title }}</h1>

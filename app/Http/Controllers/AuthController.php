@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\News;
+use App\Models\Gallery;
 
 class AuthController extends Controller
 {
@@ -89,7 +91,11 @@ class AuthController extends Controller
      */
     public function adminDashboard()
     {
-        return view('admin.dashboard');
+        $userCount = User::count();
+        $newsCount = News::count();
+        $galleryCount = Gallery::count();
+
+        return view('admin.dashboard', compact('userCount', 'newsCount', 'galleryCount'));
     }
 
     /**

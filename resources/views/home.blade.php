@@ -477,9 +477,16 @@
             <div class="col-lg-6">
                 <div class="hero-content">
                     <div class="hero-line"></div>
-                    <h1>HEALTHY<br><span class="bold">TASTY FOOD</span></h1>
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare, augue non elementum commodo, elit libero convallis nunc, eget varius orci enim sed augue. Nullam lacus diam, rutrum in dictum ac, sagittis vitae nibh.</p>
+                    <h1>{!! str_replace('TASTY FOOD', '<span class="bold">TASTY FOOD</span>', $settings['home_hero_title'] ?? 'HEALTHY <br> TASTY FOOD') !!}</h1>
+                    <p>{{ $settings['home_hero_description'] ?? 'Lorem ipsum dolor sit amet...' }}</p>
                     <a href="{{ route('tentang') }}" class="btn-black-solid">TENTANG KAMI</a>
+                    @auth
+                        @if(Auth::user()->role === 'admin')
+                            <a href="{{ route('admin.website_settings.index') }}" class="btn btn-sm btn-warning mb-3 shadow-sm rounded-pill px-3">
+                                <i class="bi bi-pencil-square pe-1"></i> Edit Landing Page
+                            </a>
+                        @endif
+                    @endauth
                 </div>
             </div>
         </div>
@@ -493,8 +500,17 @@
 <section class="about-section">
     <div class="container">
         <h2>Tentang Kami</h2>
-        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in eros elementum tristique. Duis cursus, mi quis viverra ornare, eros dolor interdum nulla, ut commodo diam libero vitae erat. Aenean faucibus nibh et justo cursus id rutrum lorem imperdiet. Nunc ut sem vitae risus tristique posuere.</p>
+        <p>{{ $settings['home_about_description'] ?? 'Lorem ipsum dolor sit amet...' }}</p>
         <div class="about-line"></div>
+        @auth
+            @if(Auth::user()->role === 'admin')
+                <div class="mt-4">
+                    <a href="{{ route('admin.website_settings.index') }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3">
+                        <i class="bi bi-pencil-square pe-1"></i> Edit Deskripsi
+                    </a>
+                </div>
+            @endif
+        @endauth
     </div>
 </section>
 
@@ -502,51 +518,32 @@
 <section class="cards-strip">
     <div class="container">
         <div class="row justify-content-center">
+            @foreach($cards as $card)
             <div class="col-lg-3 col-md-6 col-sm-6">
                 <div class="strip-card">
                     <div class="media">
-                        <img src="{{ asset('images/img-1.png') }}" alt="Lorem Ipsum">
+                        <img src="{{ str_contains($card->image, 'images/') ? asset($card->image) : asset('storage/' . $card->image) }}" alt="{{ $card->title }}">
                     </div>
                     <div class="body">
-                        <h4>LOREM IPSUM</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in tristique.</p>
+                        <h4>{{ $card->title }}</h4>
+                        <p>{{ $card->description }}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="strip-card">
-                    <div class="media">
-                        <img src="{{ asset('images/img-2.png') }}" alt="Lorem Ipsum">
-                    </div>
-                    <div class="body">
-                        <h4>LOREM IPSUM</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in tristique.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="strip-card">
-                    <div class="media">
-                        <img src="{{ asset('images/img-3.png') }}" alt="Lorem Ipsum">
-                    </div>
-                    <div class="body">
-                        <h4>LOREM IPSUM</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in tristique.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-3 col-md-6 col-sm-6">
-                <div class="strip-card">
-                    <div class="media">
-                        <img src="{{ asset('images/img-4.png') }}" alt="Lorem Ipsum">
-                    </div>
-                    <div class="body">
-                        <h4>LOREM IPSUM</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse varius enim in tristique.</p>
-                    </div>
-                </div>
-            </div>
+            @endforeach
         </div>
+        @auth
+            @if(Auth::user()->role === 'admin')
+                <div class="text-center mt-4">
+                    <a href="{{ route('admin.home_cards.create') }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3 me-2">
+                        <i class="bi bi-plus-circle pe-1"></i> Tambah Card
+                    </a>
+                    <a href="{{ route('admin.home_cards.index') }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3">
+                        <i class="bi bi-pencil-square pe-1"></i> Kelola Card
+                    </a>
+                </div>
+            @endif
+        @endauth
     </div>
 </section>
 
@@ -555,86 +552,69 @@
     <div class="container">
         <h2>Berita Kami</h2>
         <div class="row g-4">
+            @php $featured = $news->shift(); @endphp
+            @if($featured)
             <div class="col-lg-6">
                 <div class="news-card-large">
                     <div class="media">
-                        <img src="{{ asset('images/fathul-abrar-T-qI_MI2EMA-unsplash.jpg') }}" alt="Featured News">
+                        @php
+                            $featuredImg = str_contains($featured->image, 'berita') ? asset('images/' . $featured->image) : (str_contains($featured->image, '/') ? asset('storage/' . $featured->image) : asset('storage/news/' . $featured->image));
+                        @endphp
+                        <img src="{{ $featuredImg }}" alt="{{ $featured->title }}">
                     </div>
                     <div class="body">
-                        <h4>LOREM IPSUM DOLOR SIT AMET, CONSECTETUR ADIPISCING ELIT</h4>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce scelerisque magna aliquet cursus tempus. Duis viverra metus et turpis elementum elementum. Aliquam rutrum placerat tellus et suscipit. Curabitur facilisis lectus vitae eros malesuada eleifend. Mauris eget tellus odio. Phasellus vestibulum turpis ac sem commodo, at posuere eros consequat.</p>
+                        <h4>{{ $featured->title }}</h4>
+                        <p>{{ Str::limit($featured->excerpt, 250) }}</p>
                         <div class="mt-auto d-flex justify-content-between align-items-center">
-                            <a href="{{ route('berita.index') }}" class="link-yellow text-capitalize" style="font-size: 11px;">Baca selengkapnya</a>
+                            <a href="{{ route('berita.show', $featured->slug) }}" class="link-yellow text-capitalize" style="font-size: 11px;">Baca selengkapnya</a>
                             <span class="text-muted fw-bold" style="letter-spacing: 2px; line-height: 1;">...</span>
                         </div>
                     </div>
                 </div>
             </div>
+            @endif
+
             <div class="col-lg-6">
                 <div class="row g-4">
+                    @forelse($news as $item)
                     <div class="col-6">
                         <div class="news-card-small">
                             <div class="media">
-                                <img src="{{ asset('images/anna-pelzer-IGfIGP5ONV0-unsplash.jpg') }}" alt="News 1">
+                                @php
+                                    $itemImg = str_contains($item->image, 'berita') ? asset('images/' . $item->image) : (str_contains($item->image, '/') ? asset('storage/' . $item->image) : asset('storage/news/' . $item->image));
+                                @endphp
+                                <img src="{{ $itemImg }}" alt="{{ $item->title }}">
                             </div>
                             <div class="body">
-                                <h5>LOREM IPSUM</h5>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare, augue eu rutrum commodo.</p>
+                                <h5>{{ $item->title }}</h5>
+                                <p>{{ Str::limit($item->excerpt, 100) }}</p>
                                 <div class="mt-auto d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('berita.index') }}" class="link-yellow text-capitalize" style="font-size: 11px;">Baca selengkapnya</a>
+                                    <a href="{{ route('berita.show', $item->slug) }}" class="link-yellow text-capitalize" style="font-size: 11px;">Baca selengkapnya</a>
                                     <span class="text-muted fw-bold" style="letter-spacing: 2px; line-height: 1;">...</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-6">
-                        <div class="news-card-small">
-                            <div class="media">
-                                <img src="{{ asset('images/sebastian-coman-photography-eBmyH7oO5wY-unsplash.jpg') }}" alt="News 2">
-                            </div>
-                            <div class="body">
-                                <h5>LOREM IPSUM</h5>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare, augue eu rutrum commodo.</p>
-                                <div class="mt-auto d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('berita.index') }}" class="link-yellow text-capitalize" style="font-size: 11px;">Baca selengkapnya</a>
-                                    <span class="text-muted fw-bold" style="letter-spacing: 2px; line-height: 1;">...</span>
-                                </div>
-                            </div>
+                    @empty
+                        <div class="col-12">
+                            <p class="text-muted">Belum ada berita lainnya.</p>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="news-card-small">
-                            <div class="media">
-                                <img src="{{ asset('images/michele-blackwell-rAyCBQTH7ws-unsplash.jpg') }}" alt="News 3">
-                            </div>
-                            <div class="body">
-                                <h5>LOREM IPSUM</h5>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare, augue eu rutrum commodo.</p>
-                                <div class="mt-auto d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('berita.index') }}" class="link-yellow text-capitalize" style="font-size: 11px;">Baca selengkapnya</a>
-                                    <span class="text-muted fw-bold" style="letter-spacing: 2px; line-height: 1;">...</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="news-card-small">
-                            <div class="media">
-                                <img src="{{ asset('images/brooke-lark-1Rm9GLHV0UA-unsplash.jpg') }}" alt="News 4">
-                            </div>
-                            <div class="body">
-                                <h5>LOREM IPSUM</h5>
-                                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Phasellus ornare, augue eu rutrum commodo.</p>
-                                <div class="mt-auto d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('berita.index') }}" class="link-yellow text-capitalize" style="font-size: 11px;">Baca selengkapnya</a>
-                                    <span class="text-muted fw-bold" style="letter-spacing: 2px; line-height: 1;">...</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    @endforelse
                 </div>
             </div>
         </div>
+        @auth
+            @if(Auth::user()->role === 'admin')
+                <div class="text-center mt-5">
+                    <a href="{{ route('admin.news.create') }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3 me-2">
+                        <i class="bi bi-plus-circle pe-1"></i> Tambah Berita
+                    </a>
+                    <a href="{{ route('admin.news.index') }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3">
+                        <i class="bi bi-pencil-square pe-1"></i> Kelola Berita
+                    </a>
+                </div>
+            @endif
+        @endauth
     </div>
 </section>
 
@@ -643,10 +623,13 @@
     <div class="container">
         <h2>Galeri Kami</h2>
         <div class="row g-4">
-            @foreach($galleryImages as $img)
+            @foreach($galleries as $item)
             <div class="col-lg-4 col-md-6">
                 <div class="gallery-item">
-                    <img src="{{ asset($img) }}" alt="Gallery Image">
+                    @php
+                        $galImg = str_contains($item->image, 'galeri') ? asset('images/' . $item->image) : (str_contains($item->image, '/') ? asset('storage/' . $item->image) : asset('storage/galleries/' . $item->image));
+                    @endphp
+                    <img src="{{ $galImg }}" alt="Gallery Image">
                 </div>
             </div>
             @endforeach

@@ -12,6 +12,13 @@ use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
+    public function welcome() {
+        $news = News::latest()->take(3)->get();
+        $galleries = Gallery::latest()->take(4)->get();
+        $settings = WebsiteSetting::all()->pluck('value', 'key');
+        return view('welcome', compact('news', 'galleries', 'settings'));
+    }
+
     public function home() {
         $news = News::latest()->take(4)->get();
         $galleries = Gallery::latest()->take(6)->get();

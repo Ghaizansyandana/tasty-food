@@ -438,13 +438,49 @@
 <nav class="navbar-custom">
     <div class="container">
         <div class="d-flex align-items-center">
-            <a href="{{ route('home') }}" class="navbar-brand-custom">TASTY FOOD</a>
+            <a href="{{ route('welcome') }}" class="navbar-brand-custom">TASTY FOOD</a>
             <ul class="navbar-nav-custom d-none d-md-flex">
                 <li><a href="{{ route('home') }}" class="nav-link-custom active">HOME</a></li>
                 <li><a href="{{ route('tentang') }}" class="nav-link-custom">TENTANG</a></li>
                 <li><a href="{{ route('berita.index') }}" class="nav-link-custom">BERITA</a></li>
                 <li><a href="{{ route('galeri') }}" class="nav-link-custom">GALERI</a></li>
                 <li><a href="{{ route('kontak') }}" class="nav-link-custom">KONTAK</a></li>
+                                    @guest
+                        <li class="nav-item"><a class="nav-link btn btn-outline-light ms-lg-3 px-3 d-none d-lg-block" href="{{ route('register') }}">DAFTAR</a></li>
+                        <li class="nav-item"><a class="nav-link btn-black ms-lg-2 px-4 shadow-sm" href="{{ route('login') }}" style="color: white !important;">LOGIN</a></li>
+                    @else
+                        <li class="nav-item dropdown ms-lg-3">
+                            <a class="nav-link dropdown-toggle btn-profile-custom px-3 py-2 d-flex align-items-center gap-2" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="d-none d-lg-inline">{{ Auth::user()->name }}</span>
+                                <div class="profile-icon-circle">
+                                    <i class="bi bi-person-fill"></i>
+                                </div>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg mt-2 animated-fade-in" aria-labelledby="profileDropdown">
+                                <li><h6 class="dropdown-header text-dark fw-bold">Halo, {{ Auth::user()->name }}!</h6></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ Auth::user()->role === 'admin' ? route('admin.dashboard') : route('user.dashboard') }}">
+                                        <i class="bi bi-speedometer2"></i> Dashboard
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="{{ route('profile.edit') }}">
+                                        <i class="bi bi-person-gear"></i> Pengaturan Profil
+                                    </a>
+                                </li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form action="{{ route('logout') }}" method="POST">
+                                        @csrf
+                                        <button type="submit" class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger">
+                                            <i class="bi bi-box-arrow-right"></i> Keluar
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    @endguest
             </ul>
         </div>
         <button class="d-md-none border-0 bg-transparent p-0" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileMenu">
@@ -466,6 +502,7 @@
             <li class="mb-3"><a href="{{ route('berita.index') }}" class="text-decoration-none text-dark fw-bold">BERITA</a></li>
             <li class="mb-3"><a href="{{ route('galeri') }}" class="text-decoration-none text-dark fw-bold">GALERI</a></li>
             <li class="mb-3"><a href="{{ route('kontak') }}" class="text-decoration-none text-dark fw-bold">KONTAK</a></li>
+            
         </ul>
     </div>
 </div>

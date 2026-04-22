@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('hide_layout_navbar', true)
+
 @section('title', 'Tambah/Edit Berita')
 
 @section('content')
@@ -8,7 +10,7 @@
         <div class="col-md-8">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2>{{ isset($news) ? 'Edit Berita' : 'Tambah Berita' }}</h2>
-                <a href="{{ route('admin.news.index') }}" class="btn btn-outline-dark">Kembali</a>
+                <a href="{{ route('berita') }}" class="btn btn-outline-dark">Kembali</a>
             </div>
 
             <div class="card border-0 shadow-sm">

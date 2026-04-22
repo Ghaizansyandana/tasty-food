@@ -1,5 +1,9 @@
 <?php
 
+use Laravel\Socialite\Facades\Socialite;
+use Illuminate\Support\Facades\Auth;
+use App\Models\User;
+use App\Http\Controllers\GoogleController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\PageController;
@@ -10,11 +14,13 @@ use App\Http\Controllers\Admin\HomeCardController;
 use App\Http\Controllers\Admin\WebsiteSettingController;
 
 // Public routes
-Route::get('/', [PageController::class, 'home'])->name('home');
+Route::get('/', [PageController::class, 'welcome'])->name('welcome');
+Route::get('/home', [PageController::class, 'home'])->name('home');
 Route::get('/tentang', [PageController::class, 'tentang'])->name('tentang');
 Route::get('/berita', [PageController::class, 'berita'])->name('berita.index');
 Route::get('/galeri', [PageController::class, 'galeri'])->name('galeri');
 Route::get('/kontak', [PageController::class, 'kontak'])->name('kontak');
+Route::post('/kontak', [\App\Http\Controllers\ContactController::class, 'store'])->name('kontak.store');
 Route::get('/berita/{slug}', [NewsController::class, 'show'])->name('berita.show');
 
 // Authentication routes
@@ -45,10 +51,42 @@ Route::middleware(['auth'])->group(function () {
         Route::resource('home_cards', HomeCardController::class);
         Route::get('website-settings', [WebsiteSettingController::class, 'index'])->name('website_settings.index');
         Route::put('website-settings', [WebsiteSettingController::class, 'update'])->name('website_settings.update');
+        Route::resource('contacts', \App\Http\Controllers\Admin\ContactController::class)->only(['index', 'show', 'destroy']);
+        Route::post('contacts/{contact}/reply', [\App\Http\Controllers\Admin\ContactController::class, 'sendReply'])->name('contacts.reply');
     });
     
     // User routes
     Route::get('/user/dashboard', [AuthController::class, 'userDashboard'])
         ->name('user.dashboard')
         ->middleware('role:user');
+});
+
+// Pastikan ada ->name('google.login') di baris ini
+Route::get('auth/google', [GoogleController::class, 'redirectToGoogle'])->name('google.login');
+
+// Untuk callback, namanya bebas tapi linknya harus sama dengan yang di Google Console
+Route::get('auth/google/callback', [GoogleController::class, 'handleGoogleCallback'])->name('google.callback');
+
+Route::get('/dashboard', [GoogleController::class, 'dashboard'])->middleware(['auth'])->name('dashboard');
+
+// Route untuk arahkan ke Facebook
+Route::get('/auth/facebook', function () {
+    return Socialite::driver('facebook')->stateless()->redirect();
+});
+
+// Route untuk terima data dari Facebook
+Route::get('/auth/facebook/callback', function () {
+    $fbUser = Socialite::driver('facebook')->stateless()->user();
+    
+    // Cek apakah user sudah ada di database berdasarkan email
+    $user = User::updateOrCreate([
+        'email' => $fbUser->email,
+    ], [
+        'name' => $fbUser->name,
+        'password' => bcrypt('password_random_aja'), // Karena login via sosmed
+    ]);
+
+    Auth::login($user);
+
+    return redirect('/dashboard'); // Sesuaikan dengan route sesudah login kamu
 });

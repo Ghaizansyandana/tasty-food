@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('hide_layout_navbar', true)
+
 @section('title', 'Kelola Berita')
 
 @section('content')
@@ -7,7 +9,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Kelola Berita</h2>
         <div>
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-dark me-2">Kembali</a>
+            <a href="{{ route('berita') }}" class="btn btn-outline-dark me-2">Kembali</a>
             <a href="{{ route('admin.news.create') }}" class="btn btn-dark">Tambah Berita</a>
         </div>
     </div>
@@ -44,10 +46,10 @@
                                 <td>{{ $news->created_at->format('d M Y') }}</td>
                                 <td>
                                     <a href="{{ route('admin.news.edit', $news->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                    <form action="{{ route('admin.news.destroy', $news->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus berita ini?')">
+                                    <form action="{{ route('admin.news.destroy', $news->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger delete-confirm" data-message="Hapus berita ini?">Hapus</button>
                                     </form>
                                 </td>
                             </tr>

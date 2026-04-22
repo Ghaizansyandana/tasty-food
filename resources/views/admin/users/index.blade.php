@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+@section('hide_layout_navbar', true)
 @section('title', 'Kelola Users')
 
 @section('content')
@@ -45,10 +46,10 @@
                                 </td>
                                 <td>
                                     <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Apakah Anda yakin ingin menghapus user ini?')">
+                                    <form action="{{ route('admin.users.destroy', $user->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger delete-confirm" data-message="Hapus user ini?">Hapus</button>
                                     </form>
                                 </td>
                             </tr>

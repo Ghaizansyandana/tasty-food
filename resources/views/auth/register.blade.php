@@ -177,6 +177,15 @@
                 <input type="password" class="form-control" id="password_confirmation" name="password_confirmation" placeholder="Konfirmasi Password" required>
                 <label for="password_confirmation">Konfirmasi Sandi</label>
             </div>
+            <div class="mt-3">
+                <a href="{{ route('google.login') }}" class="btn btn-outline-danger w-100">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="20"> 
+                    Daftar dengan Google
+                </a>
+                <a href="{{ url('/auth/facebook') }}" class="btn btn-primary w-100 mt-2">
+                    <i class="fab fa-facebook"></i> Daftar dengan Facebook
+                </a>
+            </div>
 
             <div class="actions">
                 <a href="{{ route('login') }}" class="btn-create">Login di sini</a>

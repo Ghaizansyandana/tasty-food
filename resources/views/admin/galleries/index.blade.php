@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('hide_layout_navbar', true)
+
 @section('title', 'Kelola Galeri')
 
 @section('content')
@@ -50,10 +52,10 @@
                                 </td>
                                 <td class="px-4 py-3 border-0 text-end">
                                     <a href="{{ route('admin.galleries.edit', $gallery->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
-                                    <form action="{{ route('admin.galleries.destroy', $gallery->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Hapus gambar ini?')">
+                                    <form action="{{ route('admin.galleries.destroy', $gallery->id) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">Hapus</button>
+                                        <button type="submit" class="btn btn-sm btn-outline-danger delete-confirm" data-message="Hapus gambar ini?">Hapus</button>
                                     </form>
                                 </td>
                             </tr>

@@ -54,6 +54,20 @@
         </div>
         @endforelse
     </div>
+            </div>
+        @auth
+            @if(Auth::user()->role === 'admin')
+                <div class="text-center mt-5">
+                    <a href="{{ route('admin.news.create') }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3 me-2">
+                        <i class="bi bi-plus-circle pe-1"></i> Tambah Berita
+                    </a>
+                    <a href="{{ route('admin.news.index') }}" class="btn btn-sm btn-warning shadow-sm rounded-pill px-3">
+                        <i class="bi bi-pencil-square pe-1"></i> Kelola Berita
+                    </a>
+                </div>
+            @endif
+        @endauth
+    </div>
     
     <div class="mt-5 d-flex justify-content-center">
         {{ $news->links() }}

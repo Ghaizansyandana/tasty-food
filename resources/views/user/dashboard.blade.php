@@ -1,6 +1,7 @@
 @extends('layouts.app')
 
 @section('title', 'User Dashboard')
+@section('hide_layout_navbar', true)
 
 @section('content')
 <style>
@@ -78,6 +79,9 @@
                         </div>
                         <div class="col-md-6 mb-3">
                             <a href="{{ route('kontak') }}" class="btn btn-outline-dark w-100 py-3">Kontak</a>
+                        </div>
+                        <div class="col-md-12 mb-3">
+                            <a href="{{ route('home') }}" class="btn btn-outline-dark w-100 py-3">Lihat Website</a>
                         </div>
                     </div>
                 </div>

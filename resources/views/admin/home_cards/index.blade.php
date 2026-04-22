@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('hide_layout_navbar', true)
+
 @section('title', 'Kelola Home Cards')
 
 @section('content')
@@ -46,10 +48,10 @@
                                     <a href="{{ route('admin.home_cards.edit', $card->id) }}" class="btn btn-sm btn-outline-warning">
                                         <i class="bi bi-pencil"></i> Edit
                                     </a>
-                                    <form action="{{ route('admin.home_cards.destroy', $card->id) }}" method="POST" onsubmit="return confirm('Hapus card ini?')">
+                                    <form action="{{ route('admin.home_cards.destroy', $card->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger delete-confirm" data-message="Hapus card ini?">
                                             <i class="bi bi-trash"></i> Hapus
                                         </button>
                                     </form>

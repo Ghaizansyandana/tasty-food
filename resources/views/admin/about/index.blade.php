@@ -1,5 +1,7 @@
 @extends('layouts.app')
 
+@section('hide_layout_navbar', true)
+
 @section('title', 'Kelola Tentang')
 
 @section('content')
@@ -46,10 +48,10 @@
                                     <a href="{{ route('admin.about.edit', $content->id) }}" class="btn btn-sm btn-outline-warning">
                                         <i class="bi bi-pencil"></i> Edit
                                     </a>
-                                    <form action="{{ route('admin.about.destroy', $content->id) }}" method="POST" onsubmit="return confirm('Apakah Anda yakin ingin menghapus konten ini?')">
+                                    <form action="{{ route('admin.about.destroy', $content->id) }}" method="POST">
                                         @csrf
                                         @method('DELETE')
-                                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger delete-confirm" data-message="Hapus konten tentang ini?">
                                             <i class="bi bi-trash"></i> Hapus
                                         </button>
                                     </form>

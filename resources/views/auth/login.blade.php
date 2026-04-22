@@ -168,11 +168,20 @@
             <div class="d-flex justify-content-start">
                 <a href="#" class="text-decoration-none" style="color: #0b57d0; font-weight: 500; font-size: 14px;">Lupa sandi?</a>
             </div>
-
+            <div class="mt-3">
+                <a href="{{ route('google.login') }}" class="btn btn-outline-danger w-100">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/5/53/Google_%22G%22_Logo.svg" width="20"> 
+                    Login dengan Google
+                </a>
+                <a href="{{ url('/auth/facebook') }}" class="btn btn-primary w-100 mt-2">
+                    <i class="fab fa-facebook"></i> Login dengan Facebook
+                </a>
+            </div>
             <div class="actions">
                 <a href="{{ route('register') }}" class="btn-create">Buat akun</a>
                 <button type="submit" class="btn btn-login">Selanjutnya</button>
             </div>
+
         </form>
     </div>
 

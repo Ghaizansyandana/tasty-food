@@ -8,9 +8,11 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\News;
 use App\Models\Gallery;
+use App\Models\Visitor;
 
 class AuthController extends Controller
 {
+    // ... lines omitted for brevity in thought, but I'll provide the exact replacement
     /**
      * Show register form
      */
@@ -94,8 +96,48 @@ class AuthController extends Controller
         $userCount = User::count();
         $newsCount = News::count();
         $galleryCount = Gallery::count();
+        $contactCount = \App\Models\Contact::count();
+        
+        // Visitor Statistics
+        $uniqueVisitors = Visitor::count();
+        $totalHits = Visitor::sum('hits');
+        $returningVisitors = Visitor::where('hits', '>', 1)->count();
 
-        return view('admin.dashboard', compact('userCount', 'newsCount', 'galleryCount'));
+        // Data for Bar Chart (Distribution)
+        $chartData = [
+            'labels' => ['Users', 'News', 'Gallery', 'Contacts', 'Unique Vis.'],
+            'data' => [$userCount, $newsCount, $galleryCount, $contactCount, $uniqueVisitors],
+        ];
+
+        // Data for Line Chart (Simplified: Growth over time)
+        // For demonstration, we'll fetch news count per day for the last 7 days
+        $last7Days = [];
+        $newsPerDay = [];
+        $visitorsPerDay = [];
+        for ($i = 6; $i >= 0; $i--) {
+            $date = now()->subDays($i)->format('Y-m-d');
+            $last7Days[] = now()->subDays($i)->format('D');
+            $newsPerDay[] = News::whereDate('created_at', $date)->count();
+            $visitorsPerDay[] = Visitor::whereDate('created_at', $date)->count();
+        }
+
+        $growthChart = [
+            'labels' => $last7Days,
+            'data' => $newsPerDay,
+            'visitorData' => $visitorsPerDay,
+        ];
+
+        return view('admin.dashboard', compact(
+            'userCount', 
+            'newsCount', 
+            'galleryCount', 
+            'contactCount',
+            'uniqueVisitors',
+            'totalHits',
+            'returningVisitors',
+            'chartData',
+            'growthChart'
+        ));
     }
 
     /**

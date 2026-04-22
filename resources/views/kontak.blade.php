@@ -11,29 +11,50 @@
     <div class="row">
         <div class="col-md-12 mb-4">
             <h3 class="fw-bold">KONTAK KAMI</h3>
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
         </div>
         
-        <div class="col-md-6">
-            <div class="mb-3">
-                <input type="text" class="form-control py-3" placeholder="Subject">
+        <form action="{{ route('kontak.store') }}" method="POST" class="row">
+            @csrf
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <input type="text" name="subject" class="form-control py-3 @error('subject') is-invalid @enderror" placeholder="Subject" value="{{ old('subject') }}" required>
+                    @error('subject')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <input type="text" name="name" class="form-control py-3 @error('name') is-invalid @enderror" placeholder="Name" value="{{ old('name') }}" required>
+                    @error('name')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="mb-3">
+                    <input type="email" name="email" class="form-control py-3 @error('email') is-invalid @enderror" placeholder="Email" value="{{ old('email') }}" required>
+                    @error('email')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
-            <div class="mb-3">
-                <input type="text" class="form-control py-3" placeholder="Name">
-            </div>
-            <div class="mb-3">
-                <input type="email" class="form-control py-3" placeholder="Email">
-            </div>
-        </div>
 
-        <div class="col-md-6">
-            <div class="mb-3">
-                <textarea class="form-control" rows="8" placeholder="Message"></textarea>
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <textarea name="message" class="form-control @error('message') is-invalid @enderror" rows="8" placeholder="Message" required>{{ old('message') }}</textarea>
+                    @error('message')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
             </div>
-        </div>
 
-        <div class="col-12 mt-3">
-            <button class="btn btn-black w-100 py-3 fw-bold">KIRIM</button>
-        </div>
+            <div class="col-12 mt-3">
+                <button type="submit" class="btn btn-black w-100 py-3 fw-bold">KIRIM</button>
+            </div>
+        </form>
     </div>
 
     <div class="row text-center mt-5 py-5">

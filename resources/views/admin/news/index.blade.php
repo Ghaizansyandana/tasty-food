@@ -9,7 +9,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Kelola Berita</h2>
         <div>
-            <a href="{{ route('berita') }}" class="btn btn-outline-dark me-2">Kembali</a>
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-dark me-2">Kembali</a>
             <a href="{{ route('admin.news.create') }}" class="btn btn-dark">Tambah Berita</a>
         </div>
     </div>
